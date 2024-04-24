@@ -5,6 +5,7 @@ extern crate nb;
 
 mod gain_mode;
 pub use gain_mode::GainMode;
+mod calibrate;
 mod read;
 mod tare;
 
