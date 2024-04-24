@@ -1,11 +1,8 @@
 use core::fmt::Debug;
 
-use hal::
-    digital::v2::{InputPin, OutputPin}
-;
+use hal::digital::v2::{InputPin, OutputPin};
 
 use crate::HX711;
-
 
 pub struct StateFinish<CLK, DT, E>
 where
@@ -32,14 +29,15 @@ where
         }
     }
 
-    pub fn finish(self) -> HX711<CLK, DT, E>
-    {
+    pub fn finish(self, first_known: f32, second_known: f32) -> HX711<CLK, DT, E> {
         let Self {
-            hx711,
+            mut hx711,
             first_measure,
             second_measure,
         } = self;
-        todo!();
+        // known_weight = scale * measured_weight + offset
+        hx711.scale = (second_known - first_known) / (second_measure - first_measure);
+        hx711.offset = (second_known - hx711.scale * second_measure) as i32;
         hx711
     }
 }
